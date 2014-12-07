@@ -1,0 +1,24 @@
+{
+	"name": "minesweep",
+	"version": "0.1.0",
+	"description": "minesweep =========",
+	"main": "index.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/robertodling/minesweep.git"
+	},
+	"author": "Robert Ödling",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/robertodling/minesweep/issues"
+	},
+	"homepage": "https://github.com/robertodling/minesweep",
+	"devDependencies": {
+		"event-stream": "^3.1.7",
+		"gulp-react": "^2.0.0",
+		"gulp-typescript": "^2.3.0"
+	}
+}
