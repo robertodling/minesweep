@@ -1,10 +1,7 @@
-function createCell(count, marked){
+function createCell(row, column){
 	return {
-		count: count,
-		marked: marked || false,
-		mark: function(m){
-			this.marked = m;
-		}
+		row:row,
+		column:column
 	}
 }
 
@@ -15,11 +12,32 @@ var gameBoard = {
 			var row = [];
 			 
 			for(var c = 0; c < cols; c++){
-				row.push(createCell(c+r*cols));	
+				row.push(createCell(r, c));	
 			}	
 			
 			this.rows.push(row);
 		}
+	},
+	getCell : function(row, column){
+		return this.rows[row][column];
+	},
+	check: function(row, column){
+		var cell = this.getCell(row, column);
+		cell.marked = !cell.marked;
+	},
+	
+	// representation of game state
+	toJSON: function (){
+		var json = {};
+		json.alive = true;
+		json.cells = this.rows.map(function (row){
+			return row.map(function (cell){
+				return cell;
+			});
+		}).reduce(function(a,b){
+			return a.concat(b);
+		});
+		return json;
 	}
 }
 
@@ -28,24 +46,37 @@ function getRandomInt(min, max) {
 }
 
 var board = Object.create(gameBoard);
-board.init(5,10);
+board.init(30,30);
 
-setInterval(function(){
-	var cell = board.rows[getRandomInt(0,4)][getRandomInt(0,9)];
-	cell.count = getRandomInt(0,400);
-	React.render(<GameBoard gameBoard={board}/>,  document.getElementById('main'));
-},1000);
+
+function render(){
+	var json = board.toJSON();
+
+var game = React.render(<GameBoard gameBoard={json}/>,  document.getElementById('main'));
+
+}
+
 var Cell = React.createClass({
 	handleClick: function(){
 		var cell = this.props.cell;
-		cell.mark(!cell.marked);
-		console.log(cell.marked);
-		this.forceUpdate();
+		board.check(cell.row, cell.column);
+		render();
 	},
 	render: function(){
 		var cell = this.props.cell;
-		return <div onClick={this.handleClick}>
-			{cell.count + (cell.marked?'0':'x')}
+		var divStyle = {
+			position: 'absolute',
+			top: cell.row*15,
+			left: cell.column*15,
+			display: 'block',
+			float: 'left',
+			width: 15,
+			heigt: 15,
+			
+		}
+			
+		return <div style={divStyle} onClick={this.handleClick}>
+			{cell.marked?'0':'x'}
 		</div>;
 	}
 });
@@ -57,18 +88,21 @@ var GameBoard = React.createClass({
 		var createItem = function(cell) {
       		return <td><Cell cell={cell}/></td>;
     	};
+		var divStyle = {
+			position: 'relative',
+			
+			display: 'block',
+			float: 'left',
+			width: 30*15,
+			heigt: 30*15,
+		}
 		
-		var createRow = function(row) {
-      		return <tr>{
-				row.map(createItem)
-			}</tr>;
-    	};
-    
-		return <table>{
-			this.props.gameBoard.rows.map(createRow)
-		}</table>;
+		return <div style={divStyle}>{
+			this.props.gameBoard.cells.map(createItem)
+		};</div>
 	}
 	
 });
 
+render();
 
