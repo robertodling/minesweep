@@ -65,19 +65,16 @@ var Cell = React.createClass({
 	render: function(){
 		var cell = this.props.cell;
 		var divStyle = {
-			position: 'absolute',
 			top: cell.row*15,
 			left: cell.column*15,
-			display: 'block',
-			float: 'left',
-			width: 15,
-			heigt: 15,
-			
 		}
+		var cx = React.addons.classSet;
+		var classes = cx({
+    		'cell': true,
+    		'clicked': cell.marked
+  		});
 			
-		return <div style={divStyle} onClick={this.handleClick}>
-			{cell.marked?'0':'x'}
-		</div>;
+		return <div className={classes} style={divStyle} onClick={this.handleClick}></div>;
 	}
 });
 
