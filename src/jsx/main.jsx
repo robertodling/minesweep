@@ -1,21 +1,11 @@
-var width = 18;
-var height = 18;
+///////////////////// GAME ENGINE ///////////////////// 
 function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min)) + min;
 }
 
-function createCell(row, column){
-	return {
-		row:row,
-		column:column
-	}
-}
-
-var alive = true;
-
 
 var gameBoard = {
-	init: function(rows, cols){
+	init: function(rows, cols, bombs){
 		this.sizeRow = rows;
 		this.sizeCols = cols;
 		this.rows = [];
@@ -24,17 +14,21 @@ var gameBoard = {
 			var row = [];
 			 
 			for(var c = 0; c < cols; c++){
-				var cell = createCell(r, c);
-				
-				row.push(cell);
+					
+				row.push({
+					row:r,
+					column:c
+				});
 			}	
 			
 			this.rows.push(row);
 		}
-		var nrBombs = 100;
+		
+		
+		var nrBombs = bombs;
 		
 		for(var i = 0; i<nrBombs; i++){
-			console.log(i);
+			
 			var row = getRandomInt(0,rows);
 			var column = getRandomInt(0,cols);
 			this.getCell(row, column).bomb = true;
@@ -80,12 +74,11 @@ var gameBoard = {
 		var cell = this.getCell(row, column);
 		
 		if(cell.bomb){
-			alive = false;
+			game.state.alive = false;
 			return;
 		}
 		
-	
-	
+		
 		if(cell.flag){
 			return;
 		}
@@ -110,10 +103,9 @@ var gameBoard = {
 	},
 	
 	
-	// representation of game state
+	// representation of state
 	toJSON: function (){
 		var json = {};
-		json.alive = true;
 		json.cells = this.rows.map(function (row){
 			return row.map(function (cell){
 				return cell;
@@ -126,17 +118,13 @@ var gameBoard = {
 }
 
 
+
+
+
+///////////////////// REACT ///////////////////// 
+
 var cx = React.addons.classSet;
-var board = Object.create(gameBoard);
-board.init(30,30);
-
-
-function render(){
-	var json = board.toJSON();
-
-	var game = React.render(<GameBoard gameBoard={json}/>,  document.getElementById('main'));
-	React.render(<Status/>,  document.getElementById('status'));
-}
+///// CLASSES
 
 var Cell = React.createClass({
 	handleClick: function(e){
@@ -144,19 +132,23 @@ var Cell = React.createClass({
 		e.preventDefault();
 		var cell = this.props.cell;
 		if(e.button){
-			board.flag(cell.row, cell.column);
-			
-		}else{
-			board.check(cell.row, cell.column);
+			game.board.flag(cell.row, cell.column);
+		} else {
+			game.board.check(cell.row, cell.column);
 		}
-		render();
+		
+		game.redraw();
+		
 	},
 	render: function(){
 		
 		var cell = this.props.cell;
+		var config = this.props.config;
+		var state = this.props.state;
+		
 		var divStyle = {
-			top: cell.row*width,
-			left: cell.column*height,
+			top: cell.row*config.width,
+			left: cell.column*config.height,
 			color: cell.number>=3?"#AA0000":(cell.number==2?"#00AA00":"#666666"),
 		}
 	
@@ -165,10 +157,10 @@ var Cell = React.createClass({
     		'clicked': cell.clicked,
     		'bomb': cell.bomb,
     		'flag': cell.flag,
-			'fa':cell.flag || cell.bomb,
-			'fa-flag':cell.flag,
-			'fa-bomb':cell.bomb && !alive,
-			'number':cell.number>0 && cell.clicked
+			'fa': cell.flag || cell.bomb,
+			'fa-flag': cell.flag,
+			'fa-bomb': cell.bomb && !state.alive,
+			'number': cell.number>0 && cell.clicked
 			
   		});
 		
@@ -185,24 +177,27 @@ var GameBoard = React.createClass({
 	
   	render: function() {
 	
+		var config = this.props.config;
+		var state = this.props.state;
 		var createItem = function(cell) {
-      		return <td><Cell cell={cell}/></td>;
+			return <td><Cell config={config} state={state} cell={cell}/></td>;
     	};
+		
 		var divStyle = {
 			position: 'relative',
 			display: 'block',
 			float: 'left',
-			width: 30*width,
-			heigt: 30*height,
+			width: config.rows*config.width,
+			heigt: config.columns*config.height,
 		}
 		
 		var classes = cx({
-    		'dead': !alive
+    		'dead': !state.alive
   		});
 			
 		
 		return <div style={divStyle} className={classes}>{
-			this.props.gameBoard.cells.map(createItem)
+			this.props.board.cells.map(createItem)
 		};</div>
 	}
 	
@@ -211,11 +206,46 @@ var GameBoard = React.createClass({
 var Status = React.createClass({
 	
   	render: function() {
-	
-		return <div>{alive?'alive':'dead'}</div>
+		return <div>{this.props.state.alive?'alive':'dead'}</div>
 	}
 	
 });
 
-render();
+///// render
+function render(config, state, board){
+	
+	React.render(<GameBoard config={config} state={state} board={board}/>,  document.getElementById('main'));
+	React.render(<Status state={state}/>,  document.getElementById('status'));
+}
 
+
+
+///// MAIN
+
+
+
+var config = {
+	width: 18,
+	height: 18,
+	bombs: 20,
+	rows: 20,
+	columns: 20
+}
+
+var game = {
+	init: function(config){
+		this.config = config;
+		this.state =  {
+			alive: true
+		};
+ 
+		var board = this.board = Object.create(gameBoard);
+		board.init(config.rows, config.columns, config.bombs);	
+	},
+	redraw: function(){
+		render(this.config, this.state, this.board.toJSON());
+	}
+}
+
+game.init(config);
+game.redraw();
