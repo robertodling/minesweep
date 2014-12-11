@@ -4,7 +4,7 @@ var eventStream = require('event-stream');
 var react = require('gulp-react');
 
 gulp.task('typescript', function () {
-	var tsResult = gulp.src('src/ts**/*.ts')
+	var tsResult = gulp.src('src/**/*.ts')
 		.pipe(ts({
 			declarationFiles: true,
 			noExternalResolve: true
@@ -21,10 +21,10 @@ gulp.task('react', function () {
 		.pipe(react())
 		.pipe(gulp.dest('build/js'));
 });
-
 gulp.task('watch', function () {
-	gulp.watch('src/ts/**/*.ts', ['typescript']);
-	gulp.watch('src/jsx/**/*.jsx', ['react']);
+	gulp.watch('src/**/*.ts', ['typescript']);
+	gulp.watch('src/**/*.jsx', ['react']);
+
 
 });
 
