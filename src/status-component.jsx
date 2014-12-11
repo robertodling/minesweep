@@ -1,6 +1,6 @@
-var minesweep;
+var components;
 
-(function (minesweep) {
+(function (components) {
 
 	var Status = React.createClass({
 
@@ -9,6 +9,6 @@ var minesweep;
 		}
 	});
 
-	minesweep.Status = Status;
+	components.Status = Status;
 
-})(minesweep || (minesweep = {}));
+})(components || (components = {}));

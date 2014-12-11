@@ -1,12 +1,12 @@
-var minesweep;
+var components;
 
-(function (minesweep) {
+(function (components) {
 	var cx = React.addons.classSet;
 
 	var Board = React.createClass({
 
 		render: function () {
-			var Square = minesweep.Square;
+			var Square = components.Square;
 
 			var config = this.props.config;
 			var state = this.props.state;
@@ -34,8 +34,9 @@ var minesweep;
 				};</div>
 		}
 
+
 	});
 
-	minesweep.Board = Board;
+	components.Board = Board;
 
-})(minesweep || (minesweep = {}));
+})(components || (components = {}));

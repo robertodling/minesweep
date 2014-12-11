@@ -1,12 +1,10 @@
-var minesweep;
-
-(function (minesweep) {
+module minesweep {
 
 	function getRandomInt(min, max) {
 		return Math.floor(Math.random() * (max - min)) + min;
 	}
 
-	var board = {
+	export var board = {
 		init: function (rows, cols, bombs) {
 			this.sizeRow = rows;
 			this.sizeCols = cols;
@@ -74,7 +72,7 @@ var minesweep;
 			var cell = this.getCell(row, column);
 
 			if (cell.bomb) {
-				game.state.alive = false;
+				game.getState().alive = false;
 				return;
 			}
 
@@ -104,7 +102,7 @@ var minesweep;
 		// representation of state
 		toJSON: function () {
 			var json = {
-				cells : this.rows.map(function (row) {
+				cells: this.rows.map(function (row) {
 					return row.map(function (cell) {
 						return cell;
 					});
@@ -116,7 +114,4 @@ var minesweep;
 		}
 	};
 
-	minesweep.board = board;
-
-})(minesweep || (minesweep = {}));
-
+}

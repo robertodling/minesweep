@@ -1,37 +1,39 @@
-var minesweep;
+module minesweep {
+    declare var components;
 
-(function (minesweep) {
+    export var game = {
+        init: function (config) {
 
-	var game = {
-		init: function (config) {
+            var _board = minesweep.board;
 
-			var _board = minesweep.board;
+            this.config = config;
+            this.state = {
+                alive: true
+            };
 
-			this.config = config;
-			this.state = {
-				alive: true
-			};
+            var board = this.board = Object.create(_board);
+            board.init(config.rows, config.columns, config.bombs);
+        },
 
-			var board = this.board = Object.create(_board);
-			board.init(config.rows, config.columns, config.bombs);
-		},
+        redraw: function () {
+            components.render(this.config, this.state, this.board.toJSON());
+        },
 
-		redraw: function () {
-			minesweep.render(this.config, this.state, this.board.toJSON());
-		},
+        getState: function () {
+            return this.state;
+        },
 
-		boardInteract: function (row, column, button) {
+        boardInteract: function (row, column, button) {
 
-			if (button === 2) {
-				this.board.flag(row, column);
-			} else if (button === 0) {
-				this.board.check(row, column);
-			}
+            if (button === 2) {
+                this.board.flag(row, column);
+            } else if (button === 0) {
+                this.board.check(row, column);
+            }
 
-			this.redraw();
-		}
-	};
+            this.redraw();
+        }
+    };
 
-	minesweep.game = game;
 
-})(minesweep || (minesweep = {}));
+}

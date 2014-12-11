@@ -1,15 +1,15 @@
-var minesweep;
+var components;
 
-(function (minesweep) {
+(function (components) {
 
 	function render(config, state, board) {
-		var Board = minesweep.Board;
-		var Status = minesweep.Status;
+		var Board = components.Board;
+		var Status = components.Status;
 
 		React.render(<Board config={config} state={state} board={board}/>, document.getElementById('main'));
 		//React.render(<Status state={state}/>, document.getElementById('status'));
 	}
 
-	minesweep.render = render;
+	components.render = render;
 
-})(minesweep || (minesweep = {}));
+})(components || (components = {}));
