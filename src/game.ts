@@ -1,5 +1,4 @@
 module minesweep {
-    declare var components;
 
     export var game = {
         init: function (config) {
@@ -16,7 +15,7 @@ module minesweep {
         },
 
         redraw: function () {
-            components.render(this.config, this.state, this.board.toJSON());
+            minesweep.render(this.config, this.state, this.board.toJSON());
         },
 
         getState: function () {

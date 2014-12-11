@@ -1,5 +1,6 @@
 module minesweep {
-
+    declare var React;
+    declare var components;
     var config = {
         width: 18,
         height: 18,
@@ -9,10 +10,24 @@ module minesweep {
     };
 
     export function start() {
-           var game = minesweep.game;
+        var game = minesweep.game;
 
-            game.init(config);
-            game.redraw();
+        game.init(config);
+        game.redraw();
+    }
+
+    export function render(config, state, board) {
+
+        var Board = components.Board;
+        var Status = components.Status;
+
+        React.render(React.createElement(Board, {
+            config: config,
+            state: state,
+            board: board
+        }), document.getElementById('main'));
+        React.render(React.createElement(Status, {state: state}), document.getElementById('status'));
+
     }
 
 }

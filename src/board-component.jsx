@@ -34,7 +34,6 @@ var components;
 				};</div>
 		}
 
-
 	});
 
 	components.Board = Board;
