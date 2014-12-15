@@ -8,6 +8,8 @@ module minesweep {
 		init: function (rows, cols, bombs) {
 			this.sizeRow = rows;
 			this.sizeCols = cols;
+			this.unflagged = bombs;
+			this.mineTripped = false;
 			this.rows = [];
 			var self = this;
 			for (var r = 0; r < rows; r++) {
@@ -61,6 +63,11 @@ module minesweep {
 		flag: function (row, column) {
 			var cell = this.getCell(row, column);
 			cell.flag = !cell.flag;
+			if(cell.flag){
+				this.unflagged--;
+			}else{
+				this.unflagged++;
+			}
 		},
 		check: function (row, column) {
 			var game = minesweep.game;
@@ -72,7 +79,7 @@ module minesweep {
 			var cell = this.getCell(row, column);
 
 			if (cell.bomb) {
-				game.getState().alive = false;
+				this.mineTripped = true;
 				return;
 			}
 
@@ -108,7 +115,9 @@ module minesweep {
 					});
 				}).reduce(function (a, b) {
 					return a.concat(b);
-				})
+				}),
+				unflagged:this.unflagged,
+				mineTripped:this.mineTripped
 			};
 			return json;
 		}

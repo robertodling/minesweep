@@ -1,26 +1,37 @@
 <!DOCTYPE html>
 <html>
-    <head><title>Testing4</title>
-	<script src="http://fb.me/react-with-addons-0.12.1.js"></script>
-	<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
-	<link rel="stylesheet" type="text/css" href="assets/css/main.css"/>
-	<link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
-	</head>
-    <body onload="load()">
-        <div id="status"></div>
-        <div id="main"></div>
-		<script src="build/js/board-component.js"></script>
-		<script src="build/js/square-component.js"></script>
-        <script src="build/js/status-component.js"></script>
-        <script src="build/js/board.js"></script>
-        <script src="build/js/game.js"></script>
-        <script src="build/js/main.js"></script>
-        <script src="build/js/render.js"></script>
+<head><title>Testing4</title>
+    <script src="http://fb.me/react-with-addons-0.12.1.js"></script>
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css"
+          rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="assets/css/main.css"/>
 
-        <script>
-            function load() {
-                minesweep.start();
-            }
-        </script>
-    </body>
+</head>
+<body onload="load()">
+
+<div>
+
+    <div class="child" >
+        <div id="main"></div>
+        <div id="status"></div>
+        <div id="new-game"></div>
+    </div>
+
+</div>
+
+<script src="build/js/select-difficulty-component.js"></script>
+<script src="build/js/new-game-component.js"></script>
+<script src="build/js/square-component.js"></script>
+<script src="build/js/board-component.js"></script>
+<script src="build/js/status-component.js"></script>
+<script src="build/js/board.js"></script>
+<script src="build/js/game.js"></script>
+<script src="build/js/main.js"></script>
+
+<script>
+    function load() {
+        minesweep.start();
+    }
+</script>
+</body>
 </html>

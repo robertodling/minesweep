@@ -21,10 +21,10 @@ gulp.task('react', function () {
 		.pipe(react())
 		.pipe(gulp.dest('build/js'));
 });
+
 gulp.task('watch', function () {
 	gulp.watch('src/**/*.ts', ['typescript']);
 	gulp.watch('src/**/*.jsx', ['react']);
-
 
 });
 

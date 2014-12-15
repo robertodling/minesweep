@@ -7,11 +7,12 @@ module minesweep {
 
             this.config = config;
             this.state = {
-                alive: true
+                alive: true,
+                unflagged: config.mines
             };
 
             var board = this.board = Object.create(_board);
-            board.init(config.rows, config.columns, config.bombs);
+            board.init(config.rows, config.columns, config.mines);
         },
 
         redraw: function () {

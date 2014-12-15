@@ -14,18 +14,19 @@ var components;
 				return (
 					<td>
 						<Square config={config} state={state} square={square}/>
-					</td>)
+					</td>
+				)
 			};
 
 			var divStyle = {
-				position: 'relative',
 				display: 'block',
-				float: 'left',
-				width: config.rows * config.width,
-				heigt: config.columns * config.height
+				position: 'relative',
+				width: config.columns * config.width,
+				height: config.rows * config.height
 			};
 
 			var classes = cx({
+				'board': true,
 				'dead': !state.alive
 			});
 

@@ -1,32 +1,38 @@
 module minesweep {
+
     declare var React;
     declare var components;
-    var config = {
-        width: 18,
-        height: 18,
-        bombs: 20,
-        rows: 20,
-        columns: 20
-    };
 
-    export function start() {
+    export function start(config) {
         var game = minesweep.game;
 
+        config = config || {
+            columns: 16,
+            rows: 16,
+            mines: 10
+        };
+
+        config.width = 20;
+        config.height = 20;
         game.init(config);
         game.redraw();
     }
 
     export function render(config, state, board) {
 
-        var Board = components.Board;
-        var Status = components.Status;
-
-        React.render(React.createElement(Board, {
+        React.render(React.createElement(components.Board, {
             config: config,
             state: state,
             board: board
         }), document.getElementById('main'));
-        React.render(React.createElement(Status, {state: state}), document.getElementById('status'));
+
+        React.render(React.createElement(components.Status,
+            {state: state}
+        ), document.getElementById('status'));
+
+        React.render(React.createElement(components.NewGame,
+            {state: state}
+        ), document.getElementById('new-game'));
 
     }
 
