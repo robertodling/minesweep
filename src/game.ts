@@ -15,15 +15,15 @@ module minesweep {
             board.init(config.rows, config.columns, config.mines);
         },
 
-        redraw: function () {
+        redraw: function ():void {
             minesweep.render(this.config, this.state, this.board.toJSON());
         },
 
-        getState: function () {
+        getState: function ():any {
             return this.state;
         },
 
-        boardInteract: function (row, column, button) {
+        boardInteract: function (row:number, column:number, button:number):void {
 
             if (button === 2) {
                 this.board.flag(row, column);

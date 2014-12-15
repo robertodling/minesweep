@@ -21,22 +21,22 @@ var components;
 			var divStyle = {
 				top: square.row * config.width,
 				left: square.column * config.height,
-				color: square.number >= 3 ? "#AA0000" : (square.number == 2 ? "#00AA00" : "#666666"),
+				color: square.adjacentMines >= 3 ? "#AA0000" : (square.adjacentMines == 2 ? "#00AA00" : "#666666"),
 			};
 
 			var classes = cx({
 				'cell': true,
-				'clicked': square.clicked,
+				'clicked': square.isRevealed,
 				'bomb': square.bomb,
 				'flag': square.flag,
 				'fa': square.flag || square.bomb,
 				'fa-flag': square.flag,
 				'fa-bomb': square.bomb && !state.alive,
-				'number': square.number > 0 && square.clicked
+				'number': square.adjacentMines > 0 && square.isRevealed
 			});
 
 			return <div className={classes} style={divStyle} onClick={this.handleClick} onContextMenu={this.handleClick}>
-			{square.clicked && square.number > 0 ? square.number : ''}
+			{square.isRevealed && square.adjacentMines > 0 ? square.adjacentMines : ''}
 			</div>;
 		}
 	});
