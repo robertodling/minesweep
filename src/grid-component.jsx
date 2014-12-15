@@ -3,20 +3,21 @@ var components;
 (function (components) {
 	var cx = React.addons.classSet;
 
-	var Board = React.createClass({
+	var Grid = React.createClass({
 
 		render: function () {
-			var Square = components.Square;
+			var Tile = components.Tile;
 
 			var config = this.props.config;
 			var state = this.props.state;
-			var createItem = function (square) {
+			var createItem = function (tile) {
 				return (
 					<td>
-						<Square config={config} state={state} square={square}/>
+						<Tile config={config} state={state} tile={tile}/>
 					</td>
 				)
 			};
+
 
 			var divStyle = {
 				display: 'block',
@@ -26,17 +27,17 @@ var components;
 			};
 
 			var classes = cx({
-				'board': true,
+				'grid': true,
 				'dead': !state.alive
 			});
 
 			return <div style={divStyle} className={classes}>{
-				this.props.board.cells.map(createItem)
+				this.props.grid.tiles.map(createItem)
 				};</div>
 		}
 
 	});
 
-	components.Board = Board;
+	components.Grid = Grid;
 
 })(components || (components = {}));

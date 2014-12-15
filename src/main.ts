@@ -4,7 +4,6 @@ module minesweep {
     declare var components;
 
     export function start(config) {
-        var game = minesweep.game;
 
         config = config || {
             columns: 16,
@@ -18,12 +17,13 @@ module minesweep {
         game.redraw();
     }
 
-    export function render(config, state, board) {
 
-        React.render(React.createElement(components.Board, {
+    export function render(config, state, grid) {
+
+        React.render(React.createElement(components.Grid, {
             config: config,
             state: state,
-            board: board
+            grid: grid
         }), document.getElementById('main'));
 
         React.render(React.createElement(components.Status,

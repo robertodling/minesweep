@@ -38,7 +38,7 @@ var components;
 		handleRowsChange: function (event) {
 			this.setState({rows: event.target.value});
 		},
-		handleBombsChange: function (event) {
+		handleMinesChange: function (event) {
 			this.setState({mines: event.target.value});
 		},
 
@@ -74,7 +74,7 @@ var components;
 
 					<p>
 						<label>Mines</label>
-						<input name="bombs" onChange={this.handleBombsChange}  value={this.state.mines}/>
+						<input name="mines" onChange={this.handleMinesChange}  value={this.state.mines}/>
 					</p>
 
 
