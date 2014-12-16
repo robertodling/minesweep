@@ -1,5 +1,4 @@
 module minesweep {
-    export class MineTile extends minesweep.Tile {
-
+    export class MineTile extends Tile {
     }
 }

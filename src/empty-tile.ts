@@ -1,6 +1,6 @@
 module minesweep {
 
-    export class EmptyTile extends minesweep.Tile {
+    export class EmptyTile extends Tile {
         public adjacentMines:number;
     }
 
