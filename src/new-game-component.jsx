@@ -33,13 +33,13 @@ var components;
 
 		},
 		handleColumnsChange: function (event) {
-			this.setState({columns: event.target.value});
+			this.setState({columns: parseInt(event.target.value,10)});
 		},
 		handleRowsChange: function (event) {
-			this.setState({rows: event.target.value});
+			this.setState({rows: parseInt(event.target.value,10)});
 		},
 		handleMinesChange: function (event) {
-			this.setState({mines: event.target.value});
+			this.setState({mines: parseInt(event.target.value,10)});
 		},
 
 		handleSubmit: function (event) {

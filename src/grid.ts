@@ -1,7 +1,5 @@
 module minesweep {
 
-
-
     function getRandomInt(min, max):number {
         return Math.floor(Math.random() * (max - min)) + min;
     }
@@ -83,7 +81,7 @@ module minesweep {
 
             if (tile instanceof MineTile) {
                 this.mineTripped = true;
-                alert('lost');
+                over(false)
                 return;
             }
             if (!(tile instanceof EmptyTile)) {
@@ -116,7 +114,7 @@ module minesweep {
 
 
             if (this.hiddenTiles === this.mines) {
-                alert('won');
+               over(true);
             }
         },
 

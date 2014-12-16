@@ -31,7 +31,7 @@ var components;
 				'flag': tile.flag,
 				'fa': tile.flag || tile.mine,
 				'fa-flag': tile.flag,
-				'fa-mine': tile.mine && !state.alive,
+				'fa-bomb': tile.mine && !state.alive,
 				'number': tile.adjacentMines > 0 && tile.isRevealed
 			});
 

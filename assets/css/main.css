@@ -1,5 +1,8 @@
 body {
-    background-color: #eee;
+
+    /*font-family: Helvetica Neue, Helvetica, sans-serif;*/
+
+    padding: 1em;
 
 }
 
@@ -19,8 +22,6 @@ body {
     cursor: pointer;
     color: #ffffff;
 
-    font-size: 8px;
-    font-weight: bold;
     width: 18px;
     height: 18px;
     text-decoration: none;
@@ -43,7 +44,7 @@ body {
 }
 
 .tile.number {
-    font-family: arial;
+
 }
 
 .tile.clicked {
@@ -86,7 +87,7 @@ div.child {
     transform: translate(-50%, -50%);
 }
 
-div.board {
+div.grid {
     border: 1px solid #666666;
 }
 
@@ -103,21 +104,23 @@ p {
 }
 
 label {
-    display: table-tile;
+    display: table-cell;
 }
 select{
-    display: table-tile;
+    display: table-cell;
     width: 110px;
     text-align: right;
 }
 
 input{
-    display: table-tile;
+    display: table-cell;
     margin-left: 65px;
     width: 40px;
     text-align: right;
 
 }
+
+
 
 
 
