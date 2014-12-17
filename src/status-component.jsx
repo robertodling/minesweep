@@ -5,8 +5,8 @@ var components;
 	var cx = React.addons.classSet;
 
 	var Status = React.createClass({
-		handleOnClick: function (event){
-			event.preventDefault()
+		handleOnClick: function (event) {
+			event.preventDefault();
 			minesweep.newGame();
 
 		},
@@ -14,17 +14,21 @@ var components;
 
 			return (
 				<div>
-					<span>{this.props.difficulty} ({this.props.dimensions.rows}x{this.props.dimensions.columns})</span>
-					<i className={  cx({
-						'fa': true,
-						'fa-clock-o': true
-					})}></i>
-					<span>{this.props.timeElapsed}</span>
-					<i className={ cx({
-						'fa': true,
-						'fa-bomb': true
-					})}></i>
-					<span>{this.props.minesLeft}</span>
+					<div>
+						<div>{this.props.difficulty} ({this.props.dimensions.rows}x{this.props.dimensions.columns})</div>
+						<i className={  cx({
+							'fa': true,
+							'fa-clock-o': true
+						})}></i>
+						<div>{this.props.timeElapsed}</div>
+						<i className={ cx({
+							'fa': true,
+							'fa-bomb': true
+						})}></i>
+						<div>{this.props.minesLeft}</div>
+					</div>
+
+					<br/>
 					<button onClick={this.handleOnClick}>New Game</button>
 				</div>
 			)

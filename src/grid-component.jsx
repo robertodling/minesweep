@@ -8,12 +8,12 @@ var components;
 		render: function () {
 			var Tile = components.Tile;
 
-			var config = this.props.config;
-			var state = this.props.state;
+			var grid = this.props.grid;
+
 			var createItem = function (tile) {
 				return (
 					<td>
-						<Tile config={config} state={state} tile={tile}/>
+						<Tile tile={tile}/>
 					</td>
 				)
 			};
@@ -22,13 +22,12 @@ var components;
 			var divStyle = {
 				display: 'block',
 				position: 'relative',
-				width: config.columns * config.width,
-				height: config.rows * config.height
+				width: grid.width * 18,
+				height: grid.height * 18
 			};
 
 			var classes = cx({
-				'grid': true,
-				'dead': !state.alive
+				'grid': true
 			});
 
 			return <div style={divStyle} className={classes}>{

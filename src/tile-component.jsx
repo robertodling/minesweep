@@ -6,21 +6,18 @@ var components;
 
 	var Tile = React.createClass({
 		handleClick: function (e) {
-			var game = minesweep.game;
 			e.preventDefault();
 			var tile = this.props.tile;
-			game.gridInteract(tile.row, tile.column, e.button);
+			var game = minesweep.gridInteract(tile.row, tile.column, e.button);
 
 		},
 		render: function () {
 
 			var tile = this.props.tile;
-			var config = this.props.config;
-			var state = this.props.state;
 
 			var divStyle = {
-				top: tile.row * config.width,
-				left: tile.column * config.height,
+				top: tile.row * 18,
+				left: tile.column * 18,
 				color: tile.adjacentMines >= 3 ? "#AA0000" : (tile.adjacentMines == 2 ? "#00AA00" : "#666666"),
 			};
 
@@ -31,7 +28,7 @@ var components;
 				'flag': tile.flag,
 				'fa': tile.flag || tile.mine,
 				'fa-flag': tile.flag,
-				'fa-bomb': tile.mine && !state.alive,
+				'fa-bomb': tile.mine,
 				'number': tile.adjacentMines > 0 && tile.isRevealed
 			});
 

@@ -1,6 +1,6 @@
 body {
 
-    /*font-family: Helvetica Neue, Helvetica, sans-serif;*/
+    font-family: Helvetica Neue, Helvetica, sans-serif;
 
     padding: 1em;
 
@@ -94,9 +94,19 @@ div.grid {
 form {
     display: table;
 }
+
 form * {
-    padding:2px;
-    margin:2px;
+    padding:0.2em;
+    margin:0.3em;
+}
+
+div#footer div {
+    display: inline-block;
+    padding:0.2em 0.2em 0.2em 0;
+
+}
+div#footer i {
+    margin-left: 3em;
 }
 
 p {
@@ -117,6 +127,11 @@ input{
     margin-left: 65px;
     width: 40px;
     text-align: right;
+
+}
+
+button {
+    padding:0.4em;
 
 }
 

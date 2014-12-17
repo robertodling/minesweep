@@ -27,8 +27,13 @@ module minesweep {
         });
     }
 
-    export var minefield = {
-        init: function (height:number, width:number, mineCount:number):void {
+    export class MineField {
+        private grid:Grid;
+        private unflagged:number;
+        private hiddenTiles:number;
+        private mines:number;
+
+        constructor(height:number, width:number, mineCount:number){
             var grid = this.grid = new Grid(height, width, generateEmptyTile);
 
             this.unflagged = mineCount;
@@ -36,17 +41,16 @@ module minesweep {
             this.hiddenTiles = height * width;
             this.mines = mineCount;
 
-
             addMines(grid, mineCount);
 
             calculateAdjecentMines(grid);
 
-        },
+        }
 
-        getTile: function (row:number, column:number):Tile {
+        getTile(row:number, column:number):Tile {
             return this.grid.get(row, column);
-        },
-        flag: function (row:number, column:number) {
+        }
+        flag(row:number, column:number) {
             var tile:Tile = this.getTile(row, column);
             tile.isFlagged = !tile.isFlagged;
             if (tile.isFlagged) {
@@ -54,8 +58,8 @@ module minesweep {
             } else {
                 this.unflagged++;
             }
-        },
-        check: function (row:number, column:number):void {
+        }
+        check(row:number, column:number):void {
 
             var tile:Tile = this.grid.get(row, column);
             if (!tile) {
@@ -92,20 +96,22 @@ module minesweep {
             if (this.hiddenTiles === this.mines) {
                 over();
             }
-        },
+       }
 
-        // representation of state
-        toJSON: function () {
+
+        toJSON() {
             var tiles = [];
             this.grid.forEach(function (row, column, tile) {
                 tiles.push(tile);
             });
             return {
                 tiles: tiles,
-                unflagged: this.unflagged
+                unflagged: this.unflagged,
+                height: this.grid.height,
+                width: this.grid.width
 
             };
         }
-    };
+    }
 
 }
