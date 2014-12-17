@@ -1,33 +1,44 @@
 module minesweep {
 
+
+    interface GameConfig {
+        difficulty:string;
+        width:number;
+        height:number;
+        mineCount: number;
+    }
+    enum GameStatus {Running, NewGame, GameOver}
+
     declare var React;
     declare var components;
-    var status;
-    var minefield;
-    var config;
 
-    export function start(_config) {
-        status = 'running';
+    var status:GameStatus;
+    var minefield:MineField;
+    var config:GameConfig;
+
+
+    export function start(_config:any):void {
+        status = GameStatus.Running;
         config = _config || {
             columns: 16,
             rows: 16,
             mines: 10
         };
 
-        minefield = new MineField(config.columns, config.rows, config.mines);
+        minefield = new MineField(config.width, config.height, config.mineCount);
 
         render();
     }
 
-    export function newGame() {
-        status = 'new_game';
+    export function newGame():void {
+        status = GameStatus.NewGame;
         render();
     }
 
-    export function over() {
-        if (status === 'running') {
-            status = 'over';
-            statistics.addGame(config.difficulty, 99, 'won');
+    export function over(won:boolean):void {
+        if (status === GameStatus.Running) {
+            status = GameStatus.GameOver;
+            statistics.addGame(config.difficulty, 99, won);
 
             render();
         }
@@ -45,9 +56,9 @@ module minesweep {
     }
 
 
-    export function render() {
+    export function render():void {
 
-        if (status === 'running') {
+        if (status === GameStatus.Running) {
 
             var grid = minefield.toJSON();
 
@@ -57,17 +68,17 @@ module minesweep {
 
             React.render(React.createElement(components.Status,
                 {
-                    difficulty: 'Beginner',
-                    dimensions: {rows: 16, columns: 16},
+                    difficulty: config.difficulty,
+                    dimensions: {rows: config.width, columns: config.height},
                     timeElapsed: 90,
-                    minesLeft: 10
+                    minesLeft: config.mineCount
                 }
             ), document.getElementById('footer'));
 
-        } else if (status === 'new_game') {
+        } else if (status === GameStatus.NewGame) {
                 React.render(React.createElement(components.NewGame,
                     {
-                        difficulty: 'Begin',
+                        difficulty: 'Beginner',
                         dimensions: {rows: 16, columns: 16},
                         timeElapsed: 90,
                         minesLeft: 90
@@ -75,7 +86,7 @@ module minesweep {
                 ), document.getElementById('main'));
             document.getElementById('footer').innerHTML = "";
 
-            } else if (status === 'over') {
+            } else if (status === GameStatus.GameOver) {
                 React.render(React.createElement(components.Result,
                     {
                         results: {

@@ -1,21 +1,21 @@
 module minesweep {
 
-    function generateEmptyTile(row, column) {
+    function generateEmptyTile(row:number, column:number):EmptyTile {
         return new EmptyTile(row, column);
     }
 
-    function addMines(grid, mines) {
+    function addMines(grid:Grid<Tile>, mineCount:number):void {
         do {
-            var tile = grid.getRandom();
+            var tile:Tile = grid.getRandom();
             if (tile instanceof MineTile) {
                 continue;
             }
             grid.set(tile.row, tile.column, new MineTile(tile.row, tile.column))
 
-        } while (--mines > 0);
+        } while (--mineCount > 0);
     }
 
-    function calculateAdjecentMines(grid) {
+    function calculateAdjecentMines(grid:Grid<Tile>):void {
         grid.forEach(function (row, column, tile) {
             if (tile instanceof MineTile) {
                 return;
@@ -28,18 +28,18 @@ module minesweep {
     }
 
     export class MineField {
-        private grid:Grid;
+        private grid:Grid<Tile>;
         private unflagged:number;
         private hiddenTiles:number;
-        private mines:number;
+        private mineCount:number;
 
         constructor(height:number, width:number, mineCount:number){
-            var grid = this.grid = new Grid(height, width, generateEmptyTile);
+            var grid = this.grid = new Grid<Tile>(height, width, generateEmptyTile);
 
             this.unflagged = mineCount;
 
             this.hiddenTiles = height * width;
-            this.mines = mineCount;
+            this.mineCount = mineCount;
 
             addMines(grid, mineCount);
 
@@ -50,7 +50,7 @@ module minesweep {
         getTile(row:number, column:number):Tile {
             return this.grid.get(row, column);
         }
-        flag(row:number, column:number) {
+        flag(row:number, column:number):void {
             var tile:Tile = this.getTile(row, column);
             tile.isFlagged = !tile.isFlagged;
             if (tile.isFlagged) {
@@ -67,7 +67,7 @@ module minesweep {
             }
 
             if (tile instanceof MineTile) {
-                over();
+                over(false);
                 return;
             }
             if (!(tile instanceof EmptyTile)) {
@@ -93,13 +93,13 @@ module minesweep {
 
             }
 
-            if (this.hiddenTiles === this.mines) {
-                over();
+            if (this.hiddenTiles === this.mineCount) {
+                over(true);
             }
        }
 
 
-        toJSON() {
+        toJSON():any {
             var tiles = [];
             this.grid.forEach(function (row, column, tile) {
                 tiles.push(tile);

@@ -1,24 +1,24 @@
 module minesweep {
 
-    function getRandomInt(min, max):number {
+    function getRandomInt(min:number, max:number):number {
         return Math.floor(Math.random() * (max - min)) + min;
     }
 
-    export class Grid {
+    export class Grid<T> {
 
-        private rows:Array<any>;
+        private rows:Array<Array<T>>;
 
-        constructor(public width:number, public height:number, generator?:any) {
+        constructor(public width:number, public height:number, generator?:Function) {
             if (generator) {
                 this.fill(generator);
             }
         }
 
-        fill(generator) {
+        fill(generator:Function) {
 
             this.rows = [];
             for (var row = 0; row < this.height; row++) {
-                var columns:Array<any> = [];
+                var columns:Array<T> = [];
 
                 for (var column = 0; column < this.width; column++) {
                     columns.push(generator(row, column));
@@ -28,23 +28,23 @@ module minesweep {
             }
         }
 
-        get(row, column) {
+        get(row:number, column:number):T {
             return this.rows[row][column];
         }
 
-        set(row, column, value) {
+        set(row:number, column:number, value:T):void {
             this.rows[row][column] = value;
         }
 
-        getRandom() {
+        getRandom():T {
             var row:number = getRandomInt(0, this.height);
             var column:number = getRandomInt(0, this.width);
             return this.rows[row][column];
         }
 
-        getAdjecent(row, column) {
+        getAdjecent(row:number, column:number):Array<T> {
             var self = this;
-            var adjecent = [];
+            var adjecent:Array<T> = [];
             [-1 + row, row, 1 + row].forEach(function (r) {
                 [-1 + column, column, 1 + column].forEach(function (c) {
 
@@ -58,7 +58,7 @@ module minesweep {
             return adjecent;
         }
 
-        forEach(visitor) {
+        forEach(visitor:Function):void {
             for (var row = 0; row < this.height; row++) {
                 for (var column = 0; column < this.width; column++) {
                     visitor(row, column, this.get(row, column))
