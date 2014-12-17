@@ -42,20 +42,20 @@ module minesweep {
             return this.rows[row][column];
         }
 
-        getAdjecent(row:number, column:number):Array<T> {
+        getAdjacent(row:number, column:number):Array<T> {
             var self = this;
-            var adjecent:Array<T> = [];
+            var adjacent:Array<T> = [];
             [-1 + row, row, 1 + row].forEach(function (r) {
                 [-1 + column, column, 1 + column].forEach(function (c) {
 
                     if (!(c === column && r === row) && r >= 0 && r < self.height &&
                         c >= 0 && c < self.width) {
-                        adjecent.push(self.get(r, c));
+                        adjacent.push(self.get(r, c));
                     }
 
                 });
             });
-            return adjecent;
+            return adjacent;
         }
 
         forEach(visitor:Function):void {
@@ -67,5 +67,4 @@ module minesweep {
             }
         }
     }
-
 }

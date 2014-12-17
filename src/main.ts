@@ -1,13 +1,6 @@
 module minesweep {
 
 
-    interface GameConfig {
-        difficulty:string;
-        width:number;
-        height:number;
-        mineCount: number;
-    }
-    enum GameStatus {Running, NewGame, GameOver}
 
     declare var React;
     declare var components;
@@ -16,16 +9,15 @@ module minesweep {
     var minefield:MineField;
     var config:GameConfig;
 
-
-    export function start(_config:any):void {
+    export function start(_config:GameConfig):void {
         status = GameStatus.Running;
         config = _config || {
-            columns: 16,
-            rows: 16,
-            mines: 10
+            width: 16,
+            height: 16,
+            mineCount: 10
         };
 
-        minefield = new MineField(config.width, config.height, config.mineCount);
+        minefield = new MineField(config.height, config.width, config.mineCount);
 
         render();
     }
@@ -35,21 +27,21 @@ module minesweep {
         render();
     }
 
-    export function over(won:boolean):void {
+    export function gameOver(won:boolean):void {
         if (status === GameStatus.Running) {
-            status = GameStatus.GameOver;
+            status = won?GameStatus.Won:GameStatus.Lost;
             statistics.addGame(config.difficulty, 99, won);
 
             render();
         }
     }
 
-    export function gridInteract(row:number, column:number, button:number):void {
+    export function interact(row:number, column:number, type:InteractType):void {
 
-        if (button === 2) {
+        if (type === InteractType.RightClick) {
             minefield.flag(row, column);
-        } else if (button === 0) {
-            minefield.check(row, column);
+        } else if (type === InteractType.RightClick) {
+            minefield.reveal(row, column);
         }
 
         render();
@@ -59,47 +51,50 @@ module minesweep {
     export function render():void {
 
         if (status === GameStatus.Running) {
-
-            var grid = minefield.toJSON();
-
-            React.render(React.createElement(components.Grid, {
-                grid: grid
-            }), document.getElementById('main'));
-
-            React.render(React.createElement(components.Status,
-                {
-                    difficulty: config.difficulty,
-                    dimensions: {rows: config.width, columns: config.height},
-                    timeElapsed: 90,
-                    minesLeft: config.mineCount
-                }
-            ), document.getElementById('footer'));
-
+            renderRunning();
         } else if (status === GameStatus.NewGame) {
-                React.render(React.createElement(components.NewGame,
-                    {
-                        difficulty: 'Beginner',
-                        dimensions: {rows: 16, columns: 16},
-                        timeElapsed: 90,
-                        minesLeft: 90
-                    }
-                ), document.getElementById('main'));
-            document.getElementById('footer').innerHTML = "";
+            renderNewGame();
+        } else if (status === GameStatus.Won || status === GameStatus.Lost) {
+            renderGameOver();
+        }
 
-            } else if (status === GameStatus.GameOver) {
-                React.render(React.createElement(components.Result,
-                    {
-                        results: {
-                            status: 'lost',
-                            seconds: 21,
-                            difficulty: 'Beginner'
-                        },
-                        statistics: statistics.get(config.difficulty)
-                    }
-                ), document.getElementById('footer'));
+    }
+
+    function renderRunning():void {
+        var mineFieldState:MineFieldState = minefield.toJSON();
+
+        React.render(React.createElement(components.Board, {
+            tiles: mineFieldState.tiles,
+            width: mineFieldState.width,
+            height: mineFieldState.height
+        }), document.getElementById('main'));
+
+        React.render(React.createElement(components.Status,
+            {
+                difficulty: config.difficulty,
+                width: mineFieldState.width,
+                height: mineFieldState.height,
+                elapsedTime: 99,
+                mineCount: mineFieldState.unflaggedMineCount
             }
+        ), document.getElementById('footer'));
+    }
 
+    function renderNewGame():void {
+        React.render(React.createElement(components.NewGame,
+            {}
+        ), document.getElementById('main'));
+        document.getElementById('footer').innerHTML = "";
+    }
 
+    function renderGameOver():void {
+        var stats = statistics.get(config.difficulty);
+        React.render(React.createElement(components.GameOver,
+            {
+                game: config,
+                statistics: stats
+            }
+        ), document.getElementById('footer'));
     }
 
 }

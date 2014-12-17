@@ -20,7 +20,7 @@ module minesweep {
             if (tile instanceof MineTile) {
                 return;
             }
-            tile.adjacentMines = grid.getAdjecent(row, column)
+            tile.adjacentMines = grid.getAdjacent(row, column)
                 .filter(function (adjecentTile) {
                     return adjecentTile instanceof MineTile;
                 }).length;
@@ -29,17 +29,16 @@ module minesweep {
 
     export class MineField {
         private grid:Grid<Tile>;
-        private unflagged:number;
+        private unflaggedMineCount:number;
         private hiddenTiles:number;
         private mineCount:number;
 
         constructor(height:number, width:number, mineCount:number){
             var grid = this.grid = new Grid<Tile>(height, width, generateEmptyTile);
 
-            this.unflagged = mineCount;
-
             this.hiddenTiles = height * width;
             this.mineCount = mineCount;
+            this.unflaggedMineCount = mineCount;
 
             addMines(grid, mineCount);
 
@@ -54,12 +53,12 @@ module minesweep {
             var tile:Tile = this.getTile(row, column);
             tile.isFlagged = !tile.isFlagged;
             if (tile.isFlagged) {
-                this.unflagged--;
+                this.unflaggedMineCount--;
             } else {
-                this.unflagged++;
+                this.unflaggedMineCount++;
             }
         }
-        check(row:number, column:number):void {
+        reveal(row:number, column:number):void {
 
             var tile:Tile = this.grid.get(row, column);
             if (!tile) {
@@ -67,7 +66,7 @@ module minesweep {
             }
 
             if (tile instanceof MineTile) {
-                over(false);
+                gameOver(false);
                 return;
             }
             if (!(tile instanceof EmptyTile)) {
@@ -87,29 +86,30 @@ module minesweep {
             } else {
                 var self = this;
                 emptyTile.isRevealed = true;
-                this.grid.getAdjecent(row, column).forEach(function (tile) {
-                    self.check(tile.row, tile.column);
+                this.grid.getAdjacent(row, column).forEach(function (tile) {
+                    self.reveal(tile.row, tile.column);
                 });
 
             }
 
             if (this.hiddenTiles === this.mineCount) {
-                over(true);
+                gameOver(true);
             }
        }
 
 
-        toJSON():any {
+        toJSON():MineFieldState {
             var tiles = [];
             this.grid.forEach(function (row, column, tile) {
                 tiles.push(tile);
             });
             return {
                 tiles: tiles,
-                unflagged: this.unflagged,
+                unflaggedMineCount: this.unflaggedMineCount,
+                mineCount: this.mineCount,
                 height: this.grid.height,
-                width: this.grid.width
-
+                width: this.grid.width,
+                loll:"test"
             };
         }
     }
