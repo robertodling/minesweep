@@ -1,36 +1,40 @@
 module minesweep {
 
-
-
+    // globals
     declare var React;
     declare var components;
 
-    var status:GameStatus;
-    var minefield:MineField;
-    var config:GameConfig;
+    export enum GameStatus {Running, NewGame, Won, Lost}
+    export enum InteractType {LeftClick=0, RightClick=2} // maps to react button type
 
-    export function start(_config:GameConfig):void {
-        status = GameStatus.Running;
-        config = _config || {
-            width: 16,
-            height: 16,
-            mineCount: 10
+    var minefield:MineField;
+    var state:GameState;
+
+    export function start(difficulty):void {
+        if(!difficulty){
+            difficulty = difficulties['intermediate'];
+        }
+
+        state = {
+            elapsed: 0,
+            status: GameStatus.Running,
+            difficulty:difficulty.name.toLowerCase()
         };
 
-        minefield = new MineField(config.height, config.width, config.mineCount);
+        minefield = new MineField(difficulty.height, difficulty.width, difficulty.mineCount);
 
         render();
     }
 
     export function newGame():void {
-        status = GameStatus.NewGame;
+        state.status = GameStatus.NewGame;
         render();
     }
 
     export function gameOver(won:boolean):void {
-        if (status === GameStatus.Running) {
-            status = won?GameStatus.Won:GameStatus.Lost;
-            statistics.addGame(config.difficulty, 99, won);
+        if (state.status === GameStatus.Running) {
+            state.status = won ? GameStatus.Won : GameStatus.Lost;
+            Statistics.gamePlayed(state.difficulty, state.elapsed, won);
 
             render();
         }
@@ -40,7 +44,7 @@ module minesweep {
 
         if (type === InteractType.RightClick) {
             minefield.flag(row, column);
-        } else if (type === InteractType.RightClick) {
+        } else if (type === InteractType.LeftClick) {
             minefield.reveal(row, column);
         }
 
@@ -50,11 +54,11 @@ module minesweep {
 
     export function render():void {
 
-        if (status === GameStatus.Running) {
+        if (state.status === GameStatus.Running) {
             renderRunning();
-        } else if (status === GameStatus.NewGame) {
+        } else if (state.status === GameStatus.NewGame) {
             renderNewGame();
-        } else if (status === GameStatus.Won || status === GameStatus.Lost) {
+        } else if (state.status === GameStatus.Won || state.status === GameStatus.Lost) {
             renderGameOver();
         }
 
@@ -71,7 +75,7 @@ module minesweep {
 
         React.render(React.createElement(components.Status,
             {
-                difficulty: config.difficulty,
+                difficulty: state.difficulty,
                 width: mineFieldState.width,
                 height: mineFieldState.height,
                 elapsedTime: 99,
@@ -82,16 +86,20 @@ module minesweep {
 
     function renderNewGame():void {
         React.render(React.createElement(components.NewGame,
-            {}
+            {
+                difficulties:difficulties,
+                difficulty:state.difficulty
+            }
         ), document.getElementById('main'));
+
         document.getElementById('footer').innerHTML = "";
     }
 
     function renderGameOver():void {
-        var stats = statistics.get(config.difficulty);
+        var stats = Statistics.getForDifficulty(state.difficulty);
         React.render(React.createElement(components.GameOver,
             {
-                game: config,
+                game: state,
                 statistics: stats
             }
         ), document.getElementById('footer'));

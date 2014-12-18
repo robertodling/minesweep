@@ -2,26 +2,23 @@ module minesweep {
 
     export var difficulties = {
         beginner: {
-            name: 'beginner',
-            columns: 9,
-            rows: 9,
-            mines: 10
+            name: 'Beginner',
+            width: 9,
+            height: 9,
+            mineCount: 10
         },
         intermediate: {
-            name: 'intermediate',
-            columns: 16,
-            rows: 16,
-            mines: 10
+            name: 'Intermediate',
+            width: 16,
+            height: 16,
+            mineCount: 10
         },
         advanced: {
-            name: 'advanced',
-            columns: 30,
-            rows: 16,
-            mines: 99
+            name: 'Advanced',
+            width: 30,
+            height: 16,
+            mineCount: 99
         }
     };
 
-    export enum GameStatus {Running, NewGame, Won, Lost}
-
-    export enum InteractType {LeftClick, RightClick}
 }

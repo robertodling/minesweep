@@ -1,6 +1,5 @@
 module minesweep {
 
-
     function store(difficulty:string, data:DifficultyStatistics):void {
         localStorage.setItem('minesweep_' + difficulty, JSON.stringify(data));
     }
@@ -9,9 +8,9 @@ module minesweep {
         return JSON.parse(localStorage.getItem('minesweep_' + difficulty));
     }
 
+    export class Statistics  {
 
-    export var statistics = {
-        addGame: function (difficulty:string, time:number, won:boolean):void {
+        static gamePlayed(difficulty:string, time:number, won:boolean):void {
 
             var statistics = retrieve(difficulty);
             if (won) {
@@ -25,8 +24,8 @@ module minesweep {
 
             store(difficulty, statistics);
 
-        },
-        get: function (difficulty:string):DifficultyStatistics {
+        }
+        static getForDifficulty (difficulty:string):DifficultyStatistics {
             return retrieve(difficulty);
         }
     }

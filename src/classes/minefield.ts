@@ -15,40 +15,40 @@ module minesweep {
         } while (--mineCount > 0);
     }
 
-    function calculateAdjecentMines(grid:Grid<Tile>):void {
+    function calculateAdjacentMines(grid:Grid<Tile>):void {
         grid.forEach(function (row, column, tile) {
             if (tile instanceof MineTile) {
                 return;
             }
             tile.adjacentMines = grid.getAdjacent(row, column)
-                .filter(function (adjecentTile) {
-                    return adjecentTile instanceof MineTile;
+                .filter(function (adjacentTile) {
+                    return adjacentTile instanceof MineTile;
                 }).length;
         });
     }
 
     export class MineField {
+
         private grid:Grid<Tile>;
         private unflaggedMineCount:number;
         private hiddenTiles:number;
         private mineCount:number;
 
-        constructor(height:number, width:number, mineCount:number){
-            var grid = this.grid = new Grid<Tile>(height, width, generateEmptyTile);
+        constructor(height:number, width:number, mineCount:number) {
+            var grid = this.grid = new Grid<Tile>(width, height, generateEmptyTile);
 
             this.hiddenTiles = height * width;
             this.mineCount = mineCount;
             this.unflaggedMineCount = mineCount;
 
             addMines(grid, mineCount);
-
-            calculateAdjecentMines(grid);
-
+            calculateAdjacentMines(grid);
         }
 
         getTile(row:number, column:number):Tile {
             return this.grid.get(row, column);
         }
+
         flag(row:number, column:number):void {
             var tile:Tile = this.getTile(row, column);
             tile.isFlagged = !tile.isFlagged;
@@ -58,6 +58,7 @@ module minesweep {
                 this.unflaggedMineCount++;
             }
         }
+
         reveal(row:number, column:number):void {
 
             var tile:Tile = this.grid.get(row, column);
@@ -72,6 +73,7 @@ module minesweep {
             if (!(tile instanceof EmptyTile)) {
                 throw new Error('Uknown tile instance')
             }
+
             var emptyTile = <EmptyTile>tile;
             if (emptyTile.isFlagged) {
                 return;
@@ -95,8 +97,7 @@ module minesweep {
             if (this.hiddenTiles === this.mineCount) {
                 gameOver(true);
             }
-       }
-
+        }
 
         toJSON():MineFieldState {
             var tiles = [];
@@ -108,8 +109,7 @@ module minesweep {
                 unflaggedMineCount: this.unflaggedMineCount,
                 mineCount: this.mineCount,
                 height: this.grid.height,
-                width: this.grid.width,
-                loll:"test"
+                width: this.grid.width
             };
         }
     }

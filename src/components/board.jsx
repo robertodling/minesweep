@@ -7,12 +7,18 @@ var components;
 		render: function () {
 			var Tile = components.Tile;
 
-			var width = this.props.width;
-			var height = this.props.height;
-			var tiles = this.props.tiles;
+			var props = this.props;
+			var width = props.width;
+			var height = props.height;
+			var tiles = props.tiles;
 
 			var createTile = function (tile) {
-				return <Tile row={tile.row} column={tile.column}/>;
+				return <Tile row={tile.row}
+					column={tile.column}
+					flagged={tile.isFlagged}
+					revealed={tile.isRevealed}
+					adjacent={tile.adjacentMines}
+				/>;
 			};
 
 			var style = {

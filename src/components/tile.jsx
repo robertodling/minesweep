@@ -7,41 +7,50 @@ var components;
 	components.Tile = React.createClass({
 		handleClick: function (e) {
 			e.preventDefault();
-			var tile = this.props.tile;
-			minesweep.interact(tile.row, tile.column, e.button);
+			var props = this.props;
+			var row = props.row;
+			var column = props.column;
+			minesweep.interact(row, column, e.button);
 		},
 		render: function () {
 
 			var row = this.props.row;
 			var column = this.props.column;
-			var adjacentMines = this.props.adjacentMines;
+			var adjacent = this.props.adjacent;
 			var revealed = this.props.revealed;
 			var flagged = this.props.flagged;
 			var mine = this.props.mine;
 
+			// TODO set in css
+			function getColor(adjacent) {
+				if (adjacent >= 3) return '#AA0000';
+				if (adjacent === 2) return '#00AA00';
+				return '#666666'
+			}
+
 			var style = {
 				top: row * 18,
-				left: column * 18,
-				color: adjacentMines >= 3 ? "#AA0000" : (adjacentMines == 2 ? "#00AA00" : "#666666")
+				left: column * 18
+
 			};
 
-			var classes = cx({
+			var classConfig = {
 				'tile': true,
-				'clicked': revealed,
+				'revealed': revealed,
 				'mine': mine,
 				'flag': flagged,
 				'fa': flagged || mine,
 				'fa-flag': flagged,
-				'fa-bomb': mine,
-				'number': adjacentMines > 0 && revealed
-			});
+				'fa-bomb': mine
+			};
+			classConfig['adjacent-'+adjacent]= adjacent > 0 && revealed;
 
 			return <div
-				className={classes}
+				className={cx(classConfig)}
 				style={style}
 				onClick={this.handleClick}
 				onContextMenu={this.handleClick}>
-			{revealed && adjacentMines > 0 ? adjacentMines : ''}
+			{revealed && adjacent > 0 ? adjacent : ''}
 			</div>;
 		}
 	});

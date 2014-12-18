@@ -16,7 +16,7 @@ var components;
 			return (
 				<div>
 					<h3>You {game.status}</h3>
-					<div>Time elapsed {game.seconds} seconds</div>
+					<div>Time elapsed {game.elapsed} seconds</div>
 					<br/>
 					<div>
 						<b>Statistics for '{game.difficulty}' difficulty:</b>

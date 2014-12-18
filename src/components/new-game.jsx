@@ -2,13 +2,14 @@ var components;
 
 (function (components) {
 
-	var difficulties = mineCountweep.difficulties;
 
 	components.NewGame = React.createClass({
 		getInitialState: function () {
-			return difficulties['intermediate'];
+			var difficulties = this.props.difficulties;
+			return difficulties[this.props.difficulty];
 		},
 		handleDifficultyChange: function (event) {
+			var difficulties = minesweep.difficulties;
 			this.setState(difficulties[event.target.value]);
 
 		},
@@ -23,21 +24,24 @@ var components;
 		},
 
 		handleSubmit: function (event) {
-			mineCountweep.start(this.state);
+			minesweep.start(this.state);
 			event.preventDefault();
 		},
 		render: function () {
+			var self = this;
+			function createOption(key) {
+				var name = self.props.difficulties[key].name;
+				return <option value={key}>{name}</option>
+			}
 
 			return (
 				<form onSubmit={this.handleSubmit}>
 					<p>
 						<label>Difficulty</label>
-						<select value={this.state.name}
+						<select value={this.state.name.toLowerCase()}
 							onChange={this.handleDifficultyChange}>
-							<option value="beginner">Beginner</option>
-							<option value="intermediate">Intermediate</option>
-							<option value="advanced">Advanced</option>
-							<option value="custom">Custom</option>
+						{Object.keys(this.props.difficulties).map(createOption)}
+
 						</select>
 						<button type="submit">New Game</button>
 					</p>

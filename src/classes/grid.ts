@@ -45,6 +45,7 @@ module minesweep {
         getAdjacent(row:number, column:number):Array<T> {
             var self = this;
             var adjacent:Array<T> = [];
+            //TODO clean up
             [-1 + row, row, 1 + row].forEach(function (r) {
                 [-1 + column, column, 1 + column].forEach(function (c) {
 
